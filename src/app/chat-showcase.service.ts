@@ -1,15 +1,20 @@
 import { Injectable } from '@angular/core';
+import { HttpClient } from '@angular/common/http';
 
 @Injectable({
   providedIn: 'root'
 })
 export class ChatShowcaseService {
 
-  constructor() { }
+  constructor(private http: HttpClient) { }
 
-  reply(message) {
-    let greeting_message = {
-      text: "Hello, this is a demo bot. I don`t do much, but I can count symbols!",
+  response = '';
+
+  async reply(message) {
+    const body = { user_input:  message};
+    let data = await this.http.post<any>('https://aa8cb95e.ngrok.io/bot', body).toPromise();
+    let bot_respose = {
+      text: data.response,
       date: new Date(),
       reply: true,
       type: 'text',
@@ -19,25 +24,6 @@ export class ChatShowcaseService {
         avatar: 'https://s3.amazonaws.com/pix.iemoji.com/images/emoji/apple/ios-12/256/robot-face.png',
       },
     }
-    let bot_respose = {};
-    if ( message.toLowerCase( ) === "hi" || message.toLowerCase( ) === "hello" ) {
-      bot_respose = greeting_message;
-    } else {
-      const length = message.length;
-      const answer = `"${message}" contains exactly ${length} symbols.`;
-      bot_respose = {
-        text: answer,
-        date: new Date(),
-        reply: true,
-        type: 'text',
-        files: [],
-        user: {
-          name: 'Bot',
-          avatar: 'https://s3.amazonaws.com/pix.iemoji.com/images/emoji/apple/ios-12/256/robot-face.png',
-        },
-      }
-    }
     return bot_respose;
   }
-
 }

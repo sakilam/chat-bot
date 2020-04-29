@@ -27,7 +27,7 @@ export class ChatShowcaseComponent implements OnInit {
 
   messages: any[] = [];
 
-  sendMessage(event: any, userName: string, avatar: string, reply: boolean) {
+  async sendMessage(event: any, userName: string, avatar: string, reply: boolean) {
     const files = !event.files ? [] : event.files.map((file) => {
       return {
         url: file.src,
@@ -48,11 +48,9 @@ export class ChatShowcaseComponent implements OnInit {
       },
     });
 
-    const botReply = this.chatservice.reply(event.message);
+    const botReply = await this.chatservice.reply(event.message);
     if (botReply) {
-      setTimeout(() => { this.messages.push(botReply) }, 500);
+      this.messages.push(botReply);
     }
-
   }
-
 }
