@@ -19,13 +19,28 @@ import { ChatShowcaseService } from '../chat-showcase.service';
   `],
 })
 export class ChatShowcaseComponent implements OnInit {
+  messages: any[] = [];
 
   constructor(private chatservice: ChatShowcaseService) {}
 
   ngOnInit() {
+    this.display_greet_message("Welcome to ATMECS payroll.")
+    this.display_greet_message("Please enter your employee id.")
   }
 
-  messages: any[] = [];
+  display_greet_message(message: string) {
+    this.messages.push({
+      text: message,
+      date: new Date(),
+      reply: true,
+      type: 'text',
+      files: [],
+      user: {
+        name: 'Bot',
+        avatar: 'https://s3.amazonaws.com/pix.iemoji.com/images/emoji/apple/ios-12/256/robot-face.png',
+      },
+    });
+  }
 
   async sendMessage(event: any, userName: string, avatar: string, reply: boolean) {
     const files = !event.files ? [] : event.files.map((file) => {
